@@ -1,0 +1,84 @@
+=====================
+
+
+Access Key ID:
+AKIAWJNUWDSXBWGJQG7L
+Secret Access Key:
+NqRwdWgz5F1OiO//XbLEworeixA9rL/rUQ+rC31Q
+
+======================================
+
+http://18.208.202.127:8080/
+
+Username: indlak2025
+
+password:*******
+=========================================
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAWJNUWDSXBWGJQG7L"
+  secret_key = "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"
+}
+=========================================
+Terraform:
+pipeline {
+    agent any
+tools {
+  terraform 'terraform-10'
+}
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git 'https://github.com/mshyd925/iac-demo.git'
+            }
+        }
+        stage('Terraform Init') {
+            steps {
+               sh 'terraform init'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply --auto -approval'
+            }
+        }
+    }
+}
+
+======================================================================
+Ansible:
+
+pipeline {
+    agent any
+    stages {
+        stage('Git SCM') {
+            steps {
+                git 'https://github.com/mshyd925/myapp-ansible.git'
+            }
+        }
+        stage('Ansible') {
+            steps {
+                ansiblePlaybook credentialsId: '731c90c9-5640-4342-8c17-f22776c81935', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'dev.inv', playbook: 'apache.yml'
+            }
+        }
+      
+    }
+}
+
+
+==============================================================================
+
+Git Repo: https://github.com/mshyd925/myapp-ansible
+
+
+
+
+
+
+
+
+
+
+
+
